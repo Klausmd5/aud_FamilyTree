@@ -34,7 +34,11 @@ public class Main {
         florian.addParent(fabian);
         familyTree.add(florian);
 
-        familyTree.getAllGrandmas().stream().forEach(System.out::println);
+        //familyTree.getAllGrandmas().stream().forEach(System.out::println);
+
+        familyTree.getAllGrandchildren().forEach(System.out::println);
+        //manuel.getGrandChildren().stream().forEach(System.out::println);
+        //System.out.println(familyTree.getgr("Anel", "Fabian"));
     }
     
 }

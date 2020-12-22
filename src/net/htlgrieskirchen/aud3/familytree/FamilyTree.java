@@ -49,6 +49,10 @@ public class FamilyTree {
         return members;
     }
 
+    public Member getMemberByName(String name) {
+        return getAllMembers().stream().filter(member -> member.getName().equals(name)).collect(Collectors.toList()).get(0);
+    }
+
     public List<Member> getAllChildren(Member member) {
         List<Member> children = new ArrayList<>();
 
@@ -75,10 +79,9 @@ public class FamilyTree {
      * @return A list of all family members that are grandchildren.
      */
     public List<Member> getAllGrandchildren() {
-
-        // TODO : start programming here
-        
-        return null; // TODO : remove
+        List<Member> grandChildren = new ArrayList<>();
+        getAllGrandparents().stream().forEach(member -> grandChildren.addAll(member.getGrandChildren()));
+        return grandChildren;
     }
 
     /**
@@ -110,10 +113,7 @@ public class FamilyTree {
      * @return <code>True</code> if the family member that corresponds to <code>parentName</code> is a parent of the family member that corresponds to <code>childName</code>. Otherwise, <code>false</code>.
      */
     public boolean isParentOf(String parentName, String childName) {
-
-        // TODO : start programming here
-        
-        return false; // TODO : remove
+        return getMemberByName(parentName).getChildren().stream().anyMatch(member -> member.getName().equals(childName));
     }
     
     /**
@@ -124,10 +124,7 @@ public class FamilyTree {
      * @return <code>True</code> if the family member that corresponds to <code>grandparentName</code> is a grandparent of the family member that corresponds to <code>grandchildName</code>. Otherwise, <code>false</code>.
      */
     public boolean isGrandparentOf(String grandparentName, String grandchildName) {
-
-        // TODO : start programming here
-        
-        return false; // TODO : remove
+        return getMemberByName(grandparentName).getChildren().stream().map(Member::getChildren).anyMatch(members -> members.stream().anyMatch(member -> member.getName().equals(grandchildName)));
     }
     
 }

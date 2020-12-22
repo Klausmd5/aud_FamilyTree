@@ -3,6 +3,7 @@ package net.htlgrieskirchen.aud3.familytree;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +86,12 @@ public class Member {
 
     public boolean isGrandParent() {
         return children.stream().filter(Member::hasChildren).count() >= 1;
+    }
+
+    public List<Member> getGrandChildren() {
+        List<Member> grandChildren = new ArrayList<>();
+        children.stream().forEach(member -> grandChildren.addAll(member.getChildren()));
+        return grandChildren;
     }
 
     @Override
