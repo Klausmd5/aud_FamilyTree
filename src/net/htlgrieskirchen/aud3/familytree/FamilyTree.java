@@ -1,6 +1,7 @@
 package net.htlgrieskirchen.aud3.familytree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,7 +13,6 @@ import java.util.stream.Collectors;
 public class FamilyTree {
 
     private Member root;
-    private int size = 0;
 
     public FamilyTree() {
 
@@ -26,27 +26,29 @@ public class FamilyTree {
      * @param member Family member to add.
      */
     public void add(Member member) {
+        if(member == null) return;
+
         if(root == null) {
             root = member;
         } else {
-            if(member.getParents()[0] != null) {
-                member.getParents()[0].addChild(member);    //add child to parent 1
+            if(member.getParents().get(0) != null) {
+                member.getParents().get(0).addChild(member);    //add child to parent 1
             }
-            if(member.getParents()[1] != null) {
-                member.getParents()[1].addChild(member);    //add child to parent 2
+            if(member.getParents().size() >= 2 && member.getParents().get(1) != null) {
+                member.getParents().get(1).addChild(member);    //add child to parent 2
             }
 
         }
-        size++;
     }
 
     public List<Member> getAllMembers() {
+        if (root == null) return null;
         List<Member> members = new ArrayList<>();
 
         members.add(root);
         members.addAll(getAllChildren(root));
 
-        return members;
+        return members.stream().distinct().collect(Collectors.toList()); // remove duplicates
     }
 
     public Member getMemberByName(String name) {
@@ -90,10 +92,10 @@ public class FamilyTree {
      * @return A map of all family members that have siblings (key) and a list of their siblings (value).
      */
     public Map<Member, List<Member>> getAllSiblings() {
+        Map<Member, List<Member>> siblings = new HashMap<>();
+        getAllMembers().stream().filter(member -> member.getSiblings().size() != 0).forEach(member -> siblings.put(member, member.getSiblings()));
 
-        // TODO : start programming here
-        
-        return null; // TODO : remove
+        return siblings;
     }
 
     /**

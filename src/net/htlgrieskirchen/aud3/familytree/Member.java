@@ -1,20 +1,18 @@
 package net.htlgrieskirchen.aud3.familytree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
  *
- * @author Add your names here.
+ * @author Klaus Scheiböck, Simon Schabetsberger
  */
 public class Member {
 
     private final String name;
     private Member partner;
-    private Member[] parents;
+    private List<Member> parents;
     private List<Member> children;
     private Gender gender;
 
@@ -22,12 +20,12 @@ public class Member {
     public Member(String name) {
         this.name = name;
         partner = null;
-        parents = new Member[2];
+        parents = new ArrayList<>();
         gender = Gender.OTHER;
         children = new ArrayList<>();
     }
 
-    public Member(String name, Member partner, Member[] parents, List<Member> children, Gender gender) {
+    public Member(String name, Member partner, List<Member> parents, List<Member> children, Gender gender) {
         this.name = name;
         this.partner = partner;
         this.parents = parents;
@@ -40,11 +38,8 @@ public class Member {
     }
     
     public void addParent(Member parent) {
-        // should be fine.. normally parents aren't changed
-        if(parents[0] == null) {
-           parents[0] = parent;
-        } else {
-            parents[1] = parent;
+        if(parents.size() <= 2) {
+            parents.add(parent);
         }
     }
 
@@ -52,8 +47,12 @@ public class Member {
         return children;
     }
 
-    public Member[] getParents() {
+    public List<Member> getParents() {
         return parents;
+    }
+
+    public Member getPartner() {
+        return partner;
     }
 
     public void addPartner(Member partner) {
@@ -88,19 +87,44 @@ public class Member {
         return children.stream().filter(Member::hasChildren).count() >= 1;
     }
 
+    public List<Member> getSiblings() {
+        List<Member> siblings = new ArrayList<>();
+        getParents().stream().filter(Member::hasChildren).filter(member -> member.getChildren().size() > 1).forEach(member -> siblings.addAll(member.getChildren()));
+        return siblings;
+    }
+
     public List<Member> getGrandChildren() {
         List<Member> grandChildren = new ArrayList<>();
         children.stream().forEach(member -> grandChildren.addAll(member.getChildren()));
         return grandChildren;
     }
 
+    public String getParentNamesAsString() {
+        if(getChildren().size() < 1) return " - ";
+        return String.join(", ", parents.stream().map(member -> member.getName()).collect(Collectors.toList()));
+    }
+
+    public String getChildrenAsString() {
+        if(getChildren().size() < 1) return " - ";
+        return String.join(", ", getChildren().stream().map(member -> member.getName()).collect(Collectors.toList()));
+    }
+
+    public String getPartnerAsString() {
+        if(partner == null) return " - ";
+        return partner.getName();
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
                 "name='" + name + '\'' +
-                ", partner=" + partner +
-                ", parents=" +
-                ", children=" + children +
+                ", partner=" + getPartnerAsString() +
+                ", parents=" + getParentNamesAsString() +
+                ", children=" + getChildrenAsString() +
                 ", gender=" + gender +
                 '}';
     }
