@@ -43,6 +43,18 @@ public class Member {
         }
     }
 
+    public void setMale() {
+        this.setGender(Gender.MALE);
+    }
+
+    public void setFemale() {
+        this.setGender(Gender.FEMALE);
+    }
+
+    public void setOther() {
+        this.setGender(Gender.OTHER);
+    }
+
     public List<Member> getChildren() {
         return children;
     }
@@ -90,6 +102,9 @@ public class Member {
     public List<Member> getSiblings() {
         List<Member> siblings = new ArrayList<>();
         getParents().stream().filter(Member::hasChildren).filter(member -> member.getChildren().size() > 1).forEach(member -> siblings.addAll(member.getChildren()));
+
+        getParents().stream().forEach(member ->  System.out.println(member.hasChildren()));
+
         return siblings;
     }
 

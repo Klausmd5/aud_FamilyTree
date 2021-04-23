@@ -31,7 +31,7 @@ public class FamilyTree {
         if(root == null) {
             root = member;
         } else {
-            if(member.getParents().get(0) != null) {
+            if(member.getParents().size() != 0 && member.getParents().get(0) != null) {
                 member.getParents().get(0).addChild(member);    //add child to parent 1
             }
             if(member.getParents().size() >= 2 && member.getParents().get(1) != null) {
@@ -52,7 +52,8 @@ public class FamilyTree {
     }
 
     public Member getMemberByName(String name) {
-        return getAllMembers().stream().filter(member -> member.getName().equals(name)).collect(Collectors.toList()).get(0);
+        List<Member> m = getAllMembers().stream().filter(member -> member.getName().equals(name)).collect(Collectors.toList());
+        return m.size() != 0 ? m.get(0) : null;
     }
 
     public List<Member> getAllChildren(Member member) {
@@ -94,6 +95,9 @@ public class FamilyTree {
     public Map<Member, List<Member>> getAllSiblings() {
         Map<Member, List<Member>> siblings = new HashMap<>();
         getAllMembers().stream().filter(member -> member.getSiblings().size() != 0).forEach(member -> siblings.put(member, member.getSiblings()));
+
+        //getAllMembers().stream().filter(member -> member.getSiblings().size() != 0).forEach(System.out::println);
+        getAllMembers().stream().forEach(member -> System.out.println(member.getSiblings().size()));
 
         return siblings;
     }
