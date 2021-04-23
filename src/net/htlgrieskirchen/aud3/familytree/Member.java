@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Klaus Scheiböck, Simon Schabetsberger
+ * @author Klaus Scheiböck, Franz Einboeck
  */
 public class Member {
 

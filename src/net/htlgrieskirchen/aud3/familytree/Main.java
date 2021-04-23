@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- *
  * @author Klaus Scheiböck, Einböck Ranz
  */
 public class Main {
