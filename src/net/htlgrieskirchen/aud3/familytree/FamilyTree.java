@@ -60,9 +60,8 @@ public class FamilyTree {
     }
 
     public List<Member> getAllChildren(Member member) {
-        List<Member> children = new ArrayList<>();
 
-        children.addAll(member.getChildren());
+        List<Member> children = new ArrayList<>(member.getChildren());
 
         for(Member m: member.getChildren()) {
             children.addAll(getAllChildren(m));
@@ -86,8 +85,8 @@ public class FamilyTree {
      */
     public List<Member> getAllGrandchildren() {
         List<Member> grandChildren = new ArrayList<>();
-        getAllGrandparents().stream().forEach(member -> grandChildren.addAll(member.getGrandChildren()));
-        return grandChildren;
+        getAllGrandparents().forEach(member -> grandChildren.addAll(member.getGrandChildren()));
+        return grandChildren.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -98,9 +97,6 @@ public class FamilyTree {
     public Map<Member, List<Member>> getAllSiblings() {
         Map<Member, List<Member>> siblings = new HashMap<>();
         getAllMembers().stream().filter(member -> member.getSiblings().size() != 0).forEach(member -> siblings.put(member, member.getSiblings()));
-
-        //getAllMembers().stream().filter(member -> member.getSiblings().size() != 0).forEach(System.out::println);
-        getAllMembers().stream().forEach(member -> System.out.println(member.getSiblings().size()));
 
         return siblings;
     }

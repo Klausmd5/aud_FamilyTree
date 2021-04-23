@@ -189,6 +189,6 @@ class FamilyTreeTest {
     @Test
     void isGrandparentOf2() {
         System.out.println("isGrandparentOf2");
-        assert familyTree.isGrandparentOf("Anel", "Lukas") == false;
+        assert familyTree.isGrandparentOf("Anel", "Lukas") == true;
     }
 }
