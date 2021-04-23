@@ -46,6 +46,7 @@ public class FamilyTree {
         List<Member> members = new ArrayList<>();
 
         members.add(root);
+        members.add(root.getPartner());
         members.addAll(getAllChildren(root));
 
         return members.stream().distinct().collect(Collectors.toList()); // remove duplicates

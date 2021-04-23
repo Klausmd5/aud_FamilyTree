@@ -67,6 +67,7 @@ class FamilyTreeTest {
         gene.addParent(mortis);
         gene.addParent(tara);
 
+        ft.getAllMembers().forEach(member -> System.out.println(member.getName()));
     }
 
     @Test
