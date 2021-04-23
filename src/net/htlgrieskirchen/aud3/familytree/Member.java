@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Klaus Scheiböck, Franz Einboeck
  */
 public class Member {
-
     private final String name;
     private Member partner;
     private List<Member> parents;
@@ -38,9 +36,8 @@ public class Member {
     }
     
     public void addParent(Member parent) {
-        if(parents.size() <= 2) {
+        if(parents.size() <= 2)
             parents.add(parent);
-        }
     }
 
     public void setMale() {
@@ -105,34 +102,36 @@ public class Member {
 
     public List<Member> getSiblings() {
         List<Member> siblings = new ArrayList<>();
-        getParents().stream().filter(Member::hasChildren).filter(member -> member.getChildren().size() > 1)
-                .forEach(member -> siblings.addAll(member.getChildren().stream().filter(member1 -> !member1.getName().equals(getName())).collect(Collectors.toList())));
-        return siblings.stream().distinct().collect(Collectors.toList());
+        getParents().stream()
+                .filter(Member::hasChildren)
+                .filter(member -> member.getChildren().size() > 1)
+                .forEach(member -> siblings.addAll(member.getChildren().stream()
+                        .filter(member1 -> !member1.getName().equals(getName()))
+                        .collect(Collectors.toList())));
+        return siblings.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public List<Member> getGrandChildren() {
         List<Member> grandChildren = new ArrayList<>();
-        children.stream().forEach(member -> grandChildren.addAll(member.getChildren()));
+        children.forEach(member -> grandChildren.addAll(member.getChildren()));
         return grandChildren;
     }
 
     public String getParentNamesAsString() {
         if(getChildren().size() < 1) return " - ";
-        return String.join(", ", parents.stream().map(member -> member.getName()).collect(Collectors.toList()));
+        return parents.stream().map(Member::getName).collect(Collectors.joining(", "));
     }
 
     public String getChildrenAsString() {
         if(getChildren().size() < 1) return " - ";
-        return String.join(", ", getChildren().stream().map(member -> member.getName()).collect(Collectors.toList()));
+        return getChildren().stream().map(Member::getName).collect(Collectors.joining(", "));
     }
 
     public String getPartnerAsString() {
         if(partner == null) return " - ";
         return partner.getName();
-    }
-
-    public Gender getGender() {
-        return gender;
     }
 
     @Override
@@ -147,7 +146,6 @@ public class Member {
     }
 
     public enum Gender {
-        MALE, FEMALE, OTHER;
+        MALE, FEMALE, OTHER
     }
-
 }

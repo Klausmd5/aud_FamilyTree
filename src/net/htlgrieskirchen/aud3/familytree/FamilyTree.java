@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Klaus Scheiböck, Franz Einboeck
  */
 public class FamilyTree {
@@ -15,9 +14,7 @@ public class FamilyTree {
     private Member root;
 
     public FamilyTree() {
-
         root = null;
-
     }
 
     /**
@@ -28,45 +25,46 @@ public class FamilyTree {
     public void add(Member member) {
         if(member == null) return;
 
-        if(root == null) {
+        if(root == null)
             root = member;
-        } else {
-            if(member.getParents().size() != 0 && member.getParents().get(0) != null) {
+        else {
+            if(member.getParents().size() != 0 && member.getParents().get(0) != null)
                 member.getParents().get(0).addChild(member);    //add child to parent 1
-            }
-            if(member.getParents().size() >= 2 && member.getParents().get(1) != null) {
+            if(member.getParents().size() >= 2 && member.getParents().get(1) != null)
                 member.getParents().get(1).addChild(member);    //add child to parent 2
-            }
-
         }
     }
 
     public List<Member> getAllMembers() {
-        if (root == null) return new ArrayList<Member>();
+        if (root == null) return new ArrayList<>();
         List<Member> members = new ArrayList<>();
 
         members.add(root);
         members.add(root.getPartner());
         members.addAll(getAllChildren(root));
         // all all partners
-        getAllChildren(root).stream().filter(Member::hasPartner).forEach(member -> members.add(member.getPartner()));
+        getAllChildren(root).stream()
+                .filter(Member::hasPartner)
+                .forEach(member -> members.add(member.getPartner()));
 
-        return members.stream().distinct().collect(Collectors.toList()); // remove duplicates
+        return members.stream()
+                .distinct()
+                .collect(Collectors.toList()); // remove duplicates
     }
 
     public Member getMemberByName(String name) {
-        List<Member> m = getAllMembers().stream().filter(member -> member.getName().equals(name)).collect(Collectors.toList());
-        return m.size() != 0 ? m.get(0) : null;
+        return getAllMembers().stream()
+                .filter(currentMember -> currentMember.getName().equals(name))
+                .collect(Collectors.toList())
+                .stream().findFirst().orElse(null);
     }
 
     public List<Member> getAllChildren(Member member) {
         // get children of first child
         List<Member> children = new ArrayList<>(member.getChildren());
-
         // recursive function
-        for(Member m: member.getChildren()) {
+        for(Member m: member.getChildren())
             children.addAll(getAllChildren(m));
-        }
         return children;
     }
 
@@ -76,7 +74,9 @@ public class FamilyTree {
      * @return A list of all family members that are grandparents.
      */
     public List<Member> getAllGrandparents() {
-        return getAllMembers().stream().filter(Member::isGrandParent).collect(Collectors.toList());
+        return getAllMembers().stream()
+                .filter(Member::isGrandParent)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -87,7 +87,9 @@ public class FamilyTree {
     public List<Member> getAllGrandchildren() {
         List<Member> grandChildren = new ArrayList<>();
         getAllGrandparents().forEach(member -> grandChildren.addAll(member.getGrandChildren()));
-        return grandChildren.stream().distinct().collect(Collectors.toList());
+        return grandChildren.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     /**
@@ -97,8 +99,9 @@ public class FamilyTree {
      */
     public Map<Member, List<Member>> getAllSiblings() {
         Map<Member, List<Member>> siblings = new HashMap<>();
-        getAllMembers().stream().filter(member -> member.getSiblings().size() != 0).forEach(member -> siblings.put(member, member.getSiblings()));
-
+        getAllMembers().stream()
+                .filter(member -> member.getSiblings().size() != 0)
+                .forEach(member -> siblings.put(member, member.getSiblings()));
         return siblings;
     }
 
@@ -108,7 +111,9 @@ public class FamilyTree {
      * @return A list of all family members that are grandmas.
      */
     public List<Member> getAllGrandmas() {
-        return getAllGrandparents().stream().filter(Member::isFemale).collect(Collectors.toList());
+        return getAllGrandparents().stream()
+                .filter(Member::isFemale)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -119,7 +124,9 @@ public class FamilyTree {
      * @return <code>True</code> if the family member that corresponds to <code>parentName</code> is a parent of the family member that corresponds to <code>childName</code>. Otherwise, <code>false</code>.
      */
     public boolean isParentOf(String parentName, String childName) {
-        return getMemberByName(parentName).getChildren().stream().anyMatch(member -> member.getName().equals(childName));
+        return getMemberByName(parentName).getChildren()
+                .stream()
+                .anyMatch(member -> member.getName().equals(childName));
     }
     
     /**
@@ -130,7 +137,9 @@ public class FamilyTree {
      * @return <code>True</code> if the family member that corresponds to <code>grandparentName</code> is a grandparent of the family member that corresponds to <code>grandchildName</code>. Otherwise, <code>false</code>.
      */
     public boolean isGrandparentOf(String grandparentName, String grandchildName) {
-        return getMemberByName(grandparentName).getChildren().stream().map(Member::getChildren).anyMatch(members -> members.stream().anyMatch(member -> member.getName().equals(grandchildName)));
+        return getMemberByName(grandparentName).getChildren()
+                .stream()
+                .map(Member::getChildren)
+                .anyMatch(members -> members.stream().anyMatch(member -> member.getName().equals(grandchildName)));
     }
-    
 }

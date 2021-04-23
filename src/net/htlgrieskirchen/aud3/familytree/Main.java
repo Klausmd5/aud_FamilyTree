@@ -1,7 +1,6 @@
 package net.htlgrieskirchen.aud3.familytree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Klaus Scheiböck, Einböck Ranz
@@ -9,8 +8,6 @@ import java.util.Arrays;
 public class Main {
     
     public static void main(String[] args) {
-
-        // TODO : start programming here
         FamilyTree familyTree = new FamilyTree();
 
         Member root = new Member("Root");
@@ -125,9 +122,6 @@ public class Main {
         familyTree.add(surge);
         familyTree.add(barley);
 
-
-        //familyTree.getAllMembers().forEach(member -> System.out.println(member.getName() + " - "+(member.getChildren().size() >0 ? member.getChildren().get(0).getName() : "")));
         familyTree.getAllMembers().forEach(System.out::println);
     }
-    
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 class FamilyTreeTest {
 
-    public static FamilyTree familyTree;
+    private static FamilyTree familyTree;
 
     @BeforeAll
     static void setUp() {
@@ -79,7 +79,7 @@ class FamilyTreeTest {
         System.out.println("add2");
         FamilyTree ft  = new FamilyTree();
         ft.add(null);
-        ArrayList<Member> ar = new ArrayList<Member>();
+        ArrayList<Member> ar = new ArrayList<>();
         assert ft.getAllMembers().equals(ar);
     }
 
@@ -183,24 +183,24 @@ class FamilyTreeTest {
     @Test
     void isParentOf() {
         System.out.println("isParentOf");
-        assert familyTree.isParentOf("Emz", "Tara") == true;
+        assert familyTree.isParentOf("Emz", "Tara");
     }
 
     @Test
     void isParentOf2() {
         System.out.println("isParentOf2");
-        assert familyTree.isParentOf("Emz", "Andreas") == false;
+        assert !familyTree.isParentOf("Emz", "Andreas");
     }
 
     @Test
     void isGrandparentOf() {
         System.out.println("isGrandparentOf");
-        assert familyTree.isGrandparentOf("Emz", "Sandy") == true;
+        assert familyTree.isGrandparentOf("Emz", "Sandy");
     }
 
     @Test
     void isGrandparentOf2() {
         System.out.println("isGrandparentOf2");
-        assert familyTree.isGrandparentOf("Emz", "Poco") == true;
+        assert familyTree.isGrandparentOf("Emz", "Poco");
     }
 }
