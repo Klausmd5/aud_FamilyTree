@@ -67,6 +67,10 @@ public class Member {
         return partner;
     }
 
+    public boolean hasPartner() {
+        return getPartner() != null;
+    }
+
     public void addPartner(Member partner) {
         this.partner = partner;
     }

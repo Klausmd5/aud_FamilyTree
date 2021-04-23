@@ -42,12 +42,14 @@ public class FamilyTree {
     }
 
     public List<Member> getAllMembers() {
-        if (root == null) return null;
+        if (root == null) return new ArrayList<>();
         List<Member> members = new ArrayList<>();
 
         members.add(root);
         members.add(root.getPartner());
         members.addAll(getAllChildren(root));
+        // all all partners
+        getAllChildren(root).stream().filter(Member::hasPartner).forEach(member -> members.add(member.getPartner()));
 
         return members.stream().distinct().collect(Collectors.toList()); // remove duplicates
     }
