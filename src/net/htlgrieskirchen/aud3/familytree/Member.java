@@ -101,7 +101,7 @@ public class Member {
 
     public List<Member> getSiblings() {
         List<Member> siblings = new ArrayList<>();
-        getParents().stream().filter(Member::hasChildren).filter(member -> member.getChildren().size() > 1).forEach(member -> siblings.addAll(member.getChildren()));
+        getParents().stream().filter(Member::hasChildren).filter(member -> member.getChildren().size() >= 1).distinct().forEach(member -> siblings.addAll(member.getChildren()));
 
         getParents().stream().forEach(member ->  System.out.println(member.hasChildren()));
 
