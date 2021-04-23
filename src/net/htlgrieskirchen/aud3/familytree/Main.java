@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author Klaus Scheiböck, Simon Schabetsberger
+ * @author Klaus Scheiböck, Einböck Ranz
  */
 public class Main {
     
