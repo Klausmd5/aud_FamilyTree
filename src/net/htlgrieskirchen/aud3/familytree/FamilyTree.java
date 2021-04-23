@@ -42,7 +42,7 @@ public class FamilyTree {
     }
 
     public List<Member> getAllMembers() {
-        if (root == null) return new ArrayList<>();
+        if (root == null) return new ArrayList<Member>();
         List<Member> members = new ArrayList<>();
 
         members.add(root);
@@ -60,9 +60,10 @@ public class FamilyTree {
     }
 
     public List<Member> getAllChildren(Member member) {
-
+        // get children of first child
         List<Member> children = new ArrayList<>(member.getChildren());
 
+        // recursive function
         for(Member m: member.getChildren()) {
             children.addAll(getAllChildren(m));
         }

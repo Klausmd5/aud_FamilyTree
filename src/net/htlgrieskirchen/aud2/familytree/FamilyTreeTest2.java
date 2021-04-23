@@ -95,13 +95,6 @@ class FamilyTreeTest {
     void getAllSiblings() {
 
         Map<Member, List<Member>> result = ft.getAllSiblings();
-        System.out.println(result.size());
-
-        result.forEach((member, members) -> {
-            System.out.println(member.getName());
-            System.out.println("sibs:");
-            members.forEach(member1 -> System.out.println("sib "+member1.getName()));
-        });
 
         assertTrue(result.keySet().size() == 3);
 

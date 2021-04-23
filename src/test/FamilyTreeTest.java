@@ -5,6 +5,8 @@ import net.htlgrieskirchen.aud3.familytree.Member;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 class FamilyTreeTest {
 
     public static FamilyTree familyTree;
@@ -13,36 +15,55 @@ class FamilyTreeTest {
     static void setUp() {
         familyTree = new FamilyTree();
 
-        Member root = new Member("Anel");
-        root.setGender(Member.Gender.MALE);
-        familyTree.add(root);
+        Member emz = new Member("Emz");
+        emz.setFemale();
+        familyTree.add(emz);
+        Member frank = new Member("Frank");
+        frank.setMale();
+        familyTree.add(frank);
+        Member tara = new Member("Tara");
+        tara.setFemale();
+        familyTree.add(tara);
+        Member mortis = new Member("Mortis");
+        mortis.setMale();
+        familyTree.add(mortis);
+        Member sandy = new Member("Sandy");
+        sandy.setMale();
+        familyTree.add(sandy);
+        Member poco = new Member("Poco");
+        poco.setOther();
+        familyTree.add(poco);
+        Member gene = new Member("Gene");
+        gene.setMale();
+        familyTree.add(gene);
 
-        Member lukas = new Member("Lukas");
-        lukas.addParent(root);
-        familyTree.add(lukas);
+        emz.addPartner(frank);
+        emz.addChild(tara);
 
-        Member manuel = new Member("Manuel");
-        manuel.addParent(root);
-        manuel.setGender(Member.Gender.FEMALE);
-        familyTree.add(manuel);
+        frank.addPartner(emz);
+        frank.addChild(tara);
 
-        Member fabian = new Member("Fabian");
-        fabian.addParent(manuel);
-        familyTree.add(fabian);
+        mortis.addPartner(tara);
+        mortis.addChild(sandy);
+        mortis.addChild(poco);
+        mortis.addChild(gene);
 
-        Member markus = new Member("Markus");
-        markus.addParent(manuel);
-        markus.addParent(lukas);
-        markus.setGender(Member.Gender.MALE);
-        familyTree.add(markus);
+        tara.addParent(emz);
+        tara.addParent(frank);
+        tara.addPartner(mortis);
+        tara.addChild(sandy);
+        tara.addChild(poco);
+        tara.addChild(gene);
 
-        Member florian = new Member("Florian");
-        florian.addParent(fabian);
-        familyTree.add(florian);
+        sandy.addParent(mortis);
+        sandy.addParent(tara);
 
-        Member andreas = new Member("Andreas");
-        andreas.addParent(fabian);
-        familyTree.add(andreas);
+        poco.addParent(mortis);
+        poco.addParent(tara);
+
+        gene.addParent(mortis);
+        gene.addParent(tara);
+
     }
 
     @Test
@@ -50,7 +71,7 @@ class FamilyTreeTest {
         System.out.println("add");
         FamilyTree ft  = new FamilyTree();
         ft.add(new Member("Andreas"));
-        assert ft.getAllMembers().size() == 1;
+        assert ft.getAllMembers().size() != 0;
     }
 
     @Test
@@ -58,7 +79,8 @@ class FamilyTreeTest {
         System.out.println("add2");
         FamilyTree ft  = new FamilyTree();
         ft.add(null);
-        assert ft.getAllMembers() == null;
+        ArrayList<Member> ar = new ArrayList<Member>();
+        assert ft.getAllMembers().equals(ar);
     }
 
     @Test
@@ -70,33 +92,30 @@ class FamilyTreeTest {
     @Test
     void getAllMembers2() {
         System.out.println("getAllMembers2");
-        FamilyTree ft  = new FamilyTree();
-        assert ft.getAllMembers() == null;
+        FamilyTree familyTree = new FamilyTree();
+        assert familyTree.getAllMembers().equals(new ArrayList<Member>());
     }
 
     @Test
     void getMemberByName() {
         System.out.println("getMemberByName");
-        assert familyTree.getMemberByName("Andreas").getName().equals("Andreas");
+        assert familyTree.getMemberByName("Emz").getName().equals("Emz");
     }
 
     @Test
     void getAllChildren() {
         System.out.println("getAllChildren");
-        assert familyTree.getAllChildren(familyTree.getMemberByName("Fabian")).size() == 2;
+        assert familyTree.getAllChildren(familyTree.getMemberByName("Emz")).size() != 0;
     }
 
     @Test
     void getAllChildren2() {
         System.out.println("getAllChildren2");
-        assert familyTree.getAllChildren(familyTree.getMemberByName("Andreas")).size() == 0;
-    }
-
-    @Test
-    void getAllChildren3() {
-        System.out.println("getAllChildren3");
-        FamilyTree ft  = new FamilyTree();
-        assert ft.getAllChildren(familyTree.getMemberByName("Andreas")).size() == 0;
+        try {
+            familyTree.getAllChildren(familyTree.getMemberByName("Andreas"));
+        } catch (NullPointerException e) {
+            assert true;
+        }
     }
 
     @Test
@@ -108,52 +127,45 @@ class FamilyTreeTest {
     @Test
     void getAllGrandparents2() {
         System.out.println("getAllGrandparents2");
-        FamilyTree ft  = new FamilyTree();
+        FamilyTree familyTree = new FamilyTree();
         try {
-            ft.getAllGrandparents().get(0);
-        } catch (NullPointerException e ) {
+            familyTree.getAllGrandparents().get(0);
+        } catch (IndexOutOfBoundsException e ) {
             assert true;
-            return;
         }
-        assert false;
     }
 
     @Test
     void getAllGrandchildren() {
         System.out.println("getAllGrandchildren");
-        assert familyTree.getAllChildren(familyTree.getMemberByName("Manuel")).size() == 4;
+        assert familyTree.getAllChildren(familyTree.getMemberByName("Emz")).size() == 4;
     }
 
     @Test
     void getAllGrandchildren2() {
         System.out.println("getAllGrandchildren2");
-        assert familyTree.getAllChildren(familyTree.getMemberByName("Andreas")).size() == 0;
-    }
-
-    @Test
-    void getAllGrandchildren3() {
-        System.out.println("getAllGrandchildren3");
-        FamilyTree ft  = new FamilyTree();
-        assert ft.getAllChildren(familyTree.getMemberByName("Andreas")).size() == 0;
+        try {
+            assert familyTree.getAllChildren(familyTree.getMemberByName("Andreas")).size() == 0;
+        } catch (NullPointerException e) {
+            assert true;
+        }
     }
 
     @Test
     void getAllSiblings() {
         System.out.println("getAllSiblings");
-        assert familyTree.getAllSiblings().size() == 6;
+        assert familyTree.getAllSiblings().size() == 3;
     }
 
     @Test
     void getAllSiblings2() {
         System.out.println("getAllSiblings2");
-        FamilyTree ft  = new FamilyTree();
+        FamilyTree familyTree  = new FamilyTree();
         try {
-            ft.getAllSiblings().get(0);
+            familyTree.getAllSiblings().get(0);
         } catch (NullPointerException e ) {
             assert true;
-            return;
         }
-        assert false;
     }
 
     @Test
@@ -165,30 +177,30 @@ class FamilyTreeTest {
     @Test
     void getAllGrandmas2() {
         System.out.println("getAllGrandmas2");
-        assert familyTree.getAllGrandmas().get(0).getName().equals("Manuel");
+        assert familyTree.getAllGrandmas().get(0).getName().equals("Emz");
     }
 
     @Test
     void isParentOf() {
         System.out.println("isParentOf");
-        assert familyTree.isParentOf("Anel", "Lukas") == true;
+        assert familyTree.isParentOf("Emz", "Tara") == true;
     }
 
     @Test
     void isParentOf2() {
         System.out.println("isParentOf2");
-        assert familyTree.isParentOf("Anel", "Andreas") == false;
+        assert familyTree.isParentOf("Emz", "Andreas") == false;
     }
 
     @Test
     void isGrandparentOf() {
         System.out.println("isGrandparentOf");
-        assert familyTree.isGrandparentOf("Anel", "Fabian") == true;
+        assert familyTree.isGrandparentOf("Emz", "Sandy") == true;
     }
 
     @Test
     void isGrandparentOf2() {
         System.out.println("isGrandparentOf2");
-        assert familyTree.isGrandparentOf("Anel", "Lukas") == true;
+        assert familyTree.isGrandparentOf("Emz", "Poco") == true;
     }
 }
